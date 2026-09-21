@@ -1,37 +1,83 @@
-# Brute-Force Attack Investigation
+# SSH Brute-Force Attack Investigation
 
-## Project Overview
+## Overview
 
-This project demonstrates a simulated investigation of a suspected SSH brute-force attack against a Linux server.
+This project is a simulated investigation of suspicious SSH login activity on a Linux server.
 
-The investigation focuses on analyzing authentication logs to identify suspicious login activity, determine the source of the activity, identify affected user accounts, and recommend appropriate security measures.
+I analyzed an authentication log to identify failed login attempts, source IP addresses, targeted accounts, and successful authentication attempts.
 
-## Objectives
+The investigation was performed using Ubuntu through WSL and Linux command-line tools.
 
-- Analyze Linux authentication logs
-- Identify repeated failed SSH login attempts
-- Identify suspicious source IP addresses
-- Determine targeted user accounts
-- Identify successful authentication attempts
-- Document findings and recommended remediation
+## Investigation Summary
 
-## Tools & Technologies
+The log contained:
 
-- Linux
-- Bash
-- Command Line
-- Authentication Logs
-- SSH
-- GitHub
+- 20 failed SSH login attempts
+- 18 failed attempts from `185.73.44.21`
+- 2 failed attempts from `203.0.113.45`
+- 5 targeted accounts: `admin`, `root`, `gideon`, `backup`, and `test`
+- A successful login to `gideon` from `185.73.44.21`
+- The successful login occurred 46 seconds after the last failed attempt against `gideon`
 
-## Investigation
+The successful login does not prove that the account was compromised. Additional logs and system activity would be needed to determine whether the login was authorized.
 
-*Investigation results will be documented here.*
+## Tools Used
 
-## Findings
+- Ubuntu Linux
+- WSL
+- grep
+- awk
+- sort
+- uniq
+- head
+- tail
+- wc
 
-*Findings will be added after completing the log analysis.*
+## Investigation Process
 
-## Recommendations
+I used Linux command-line tools to:
 
-*Security recommendations will be added after completing the investigation.*
+1. Count failed SSH authentication attempts.
+2. Identify the source IP addresses.
+3. Identify the accounts being targeted.
+4. Check for successful authentication from the suspicious IP.
+5. Build a timeline of the activity.
+6. Identify additional evidence that would be needed for further investigation.
+
+## Key Finding
+
+The main finding was repeated failed authentication activity from `185.73.44.21`, followed by a successful login to the `gideon` account from the same IP.
+
+This activity would require further investigation in a real environment to determine whether the login was authorized.
+
+## Environment
+
+- Ubuntu Linux
+- Windows Subsystem for Linux (WSL)
+- Simulated SSH authentication log
+
+No real credentials, production systems, or private network data were used.
+
+## Detailed Investigation
+
+The full investigation, including the commands used, results, timeline, findings, remediation considerations, and limitations is available here:
+
+[Investigation Report](analysis/investigation.md)
+
+## Screenshots
+
+### 1. Failed Authentication Count
+
+![Failed authentication count](screenshots/01-failed-authentication-count.png)
+
+### 2. Source IP Analysis
+
+![Source IP analysis](screenshots/02-source-ip-analysis.png)
+
+### 3. Targeted Accounts
+
+![Targeted accounts](screenshots/03-targeted-accounts.png)
+
+### 4. Successful Authentication
+
+![Successful authentication](screenshots/04-successful-authentication.png)
