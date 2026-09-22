@@ -48,7 +48,7 @@ I started by checking how many failed SSH login attempts were in the log.
 
 I used:
 
-    grep -c "Failed password" ../logs/auth.log
+    grep -c "Failed password" logs/auth.log
 
 The result was:
 
@@ -65,13 +65,13 @@ Next, I wanted to see which IP addresses were behind the failed login attempts.
 
 I used:
 
-    grep "Failed password" ../logs/auth.log | awk '{print $(NF-3)}'
+    grep "Failed password" logs/auth.log | awk '{print $(NF-3)}'
 
 This showed the IP address for each failed login attempt.
 
 I then sorted and counted the IP addresses:
 
-    grep "Failed password" ../logs/auth.log | awk '{print $(NF-3)}' | sort | uniq -c
+    grep "Failed password" logs/auth.log | awk '{print $(NF-3)}' | sort | uniq -c
 
 The results were:
 
@@ -89,7 +89,7 @@ Next, I wanted to see which accounts were being targeted by the suspicious IP ad
 
 I used:
 
-    grep "Failed password" ../logs/auth.log | grep "185.73.44.21" | awk '{print $(NF-5)}' | sort | uniq -c
+    grep "Failed password" logs/auth.log | grep "185.73.44.21" | awk '{print $(NF-5)}' | sort | uniq -c
 
 The results were:
 
@@ -108,7 +108,7 @@ Next, I checked if the suspicious IP address had any successful logins.
 
 I used:
 
-    grep "Accepted password" ../logs/auth.log | grep "185.73.44.21"
+    grep "Accepted password" logs/auth.log | grep "185.73.44.21"
 
 The result was:
 
