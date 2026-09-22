@@ -15,8 +15,10 @@ The log contained:
 - 20 failed SSH login attempts
 - 18 failed attempts from `185.73.44.21`
 - 2 failed attempts from `203.0.113.45`
-- 5 targeted accounts: `admin`, `root`, `gideon`, `backup`, and `test`
-- A successful login to `gideon` from `185.73.44.21`
+- `185.73.44.21` targeted four accounts: `admin`, `root`, `gideon`, and `backup`
+- `203.0.113.45` targeted the `test` account
+- 15 failed attempts from `185.73.44.21` occurred before a successful login to `gideon`
+- 3 additional failed attempts against `backup` occurred after the successful login
 - The successful login occurred 46 seconds after the last failed attempt against `gideon`
 
 The successful login does not prove that the account was compromised. Additional logs and system activity would be needed to determine whether the login was authorized.
@@ -46,9 +48,9 @@ I used Linux command-line tools to:
 
 ## Key Finding
 
-The main finding was repeated failed authentication activity from `185.73.44.21`, followed by a successful login to the `gideon` account from the same IP.
+The main finding was repeated failed authentication activity from `185.73.44.21`. The IP generated 15 failed attempts against `admin`, `root`, and `gideon` before a successful login to the `gideon` account. Three additional failed attempts against `backup` occurred afterward.
 
-This activity would require further investigation in a real environment to determine whether the login was authorized.
+This activity would require further investigation in a real environment to determine whether the successful login was authorized.
 
 ## Environment
 
