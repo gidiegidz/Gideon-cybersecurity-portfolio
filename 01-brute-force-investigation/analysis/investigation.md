@@ -13,7 +13,7 @@ I used Linux command-line tools such as `grep`, `awk`, `sort`, `uniq`, `head`, `
 
 I used Ubuntu through WSL (Windows Subsystem for Linux) for this project.
 
-The authentication log was created by me to simulate SSH login activity. It includes both failed and successful login attempts.
+The authentication log was synthetically generated using generative AI to simulate SSH login activity. I then analyzed the log using Linux command-line tools.
 
 No real credentials or production systems were used.
 
