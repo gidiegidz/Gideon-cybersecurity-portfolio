@@ -85,17 +85,11 @@ The IP address `203.0.113.45` was responsible for the other 2 failed attempts.
 
 ## Targeted Account Analysis
 
-Next, I wanted to see which accounts were being targeted.
+Next, I wanted to see which accounts were being targeted by the suspicious IP address `185.73.44.21`.
 
 I used:
 
-    grep "Failed password" ../logs/auth.log | awk '{print $(NF-5)}'
-
-This extracted the usernames from the failed login attempts.
-
-I then sorted and counted the usernames:
-
-    grep "Failed password" ../logs/auth.log | awk '{print $(NF-5)}' | sort | uniq -c
+    grep "Failed password" ../logs/auth.log | grep "185.73.44.21" | awk '{print $(NF-5)}' | sort | uniq -c
 
 The results were:
 
@@ -103,9 +97,10 @@ The results were:
      3 backup
      5 gideon
      5 root
-     2 test
 
-The failed attempts targeted five different accounts. The `admin`, `root`, and `gideon` accounts each had five failed attempts, while `backup` had three and `test` had two.
+The IP address `185.73.44.21` targeted four different accounts: `admin`, `root`, `gideon`, and `backup`.
+
+The other two failed login attempts in the log came from `203.0.113.45` and targeted the `test` account.
 
 ## Successful Authentication Analysis
 
@@ -119,7 +114,7 @@ The result was:
 
     Sep 18 08:18:01 server01 sshd[1225]: Accepted password for gideon from 185.73.44.21 port 44192 ssh2
 
-This caught my attention because the same IP address had 18 failed login attempts before a successful login to `gideon`.
+This caught my attention because the same IP address had 15 failed login attempts before a successful login to `gideon`. The IP generated 18 failed attempts in total, with three additional failed attempts against `backup` occurring after the successful login.
 
 There were five failed attempts against `gideon` between 08:17:03 and 08:17:15. The successful login happened at 08:18:01, which was 46 seconds after the last failed attempt.
 
