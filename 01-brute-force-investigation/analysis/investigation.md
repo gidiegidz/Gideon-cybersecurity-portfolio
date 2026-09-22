@@ -4,7 +4,7 @@
 
 This project is a simulated investigation of suspicious SSH login activity on a Linux server.
 
-I analyzed the authentication log to find failed login attempts, identify the source IP addresses, see which accounts were targeted, and check if any login was successful.
+I analyzed the authentication log to find failed login attempts, identify the source IP addresses, see which usernames were targeted, and check if any login was successful.
 
 I used Linux command-line tools such as `grep`, `awk`, `sort`, `uniq`, `head`, `tail`, and `wc`.
 
@@ -35,8 +35,8 @@ No real credentials or production systems were used.
 For this investigation, I wanted to:
 
 1. Find the total number of failed SSH login attempts.
-2. Find the IP addresses that were responsible for the failed attempts.
-3. See which user accounts were targeted.
+2. Find the source IP addresses of the failed attempts.
+3. See which usernames were targeted by the suspicious IP address.
 4. Check if any login was successful from a suspicious IP.
 5. Build a timeline of what happened.
 6. Identify what other evidence I would need to determine whether the account was compromised.
@@ -78,14 +78,14 @@ The results were:
     18 185.73.44.21
      2 203.0.113.45
 
-The IP address `185.73.44.21` was responsible for 18 of the 20 failed attempts.
+The IP address `185.73.44.21` was the source of 18 of the 20 failed attempts.
 
-The IP address `203.0.113.45` was responsible for the other 2 failed attempts.
+The IP address `203.0.113.45` was the source of the other 2 failed attempts.
 
 
-## Targeted Account Analysis
+## Targeted Username Analysis
 
-Next, I wanted to see which accounts were being targeted by the suspicious IP address `185.73.44.21`.
+Next, I wanted to see which usernames were being targeted by the suspicious IP address `185.73.44.21`.
 
 I used:
 
@@ -98,9 +98,9 @@ The results were:
      5 gideon
      5 root
 
-The IP address `185.73.44.21` targeted four different accounts: `admin`, `root`, `gideon`, and `backup`.
+The IP address `185.73.44.21` targeted four different usernames: `admin`, `root`, `gideon`, and `backup`.
 
-The other two failed login attempts in the log came from `203.0.113.45` and targeted the `test` account.
+The other two failed login attempts in the log came from `203.0.113.45` and targeted the `test` username.
 
 ## Successful Authentication Analysis
 
@@ -135,9 +135,9 @@ The main thing I noticed was the successful login to `gideon` after several fail
 
 ## Findings
 
-There were 20 failed login attempts in the log. Most of them came from `185.73.44.21`, which was responsible for 18 attempts.
+There were 20 failed login attempts in the log. Most of them came from `185.73.44.21`, which was the source of 18 attempts.
 
-The IP address `185.73.44.21` targeted four accounts: `admin`, `root`, `gideon`, and `backup`.
+The IP address `185.73.44.21` targeted four usernames: `admin`, `root`, `gideon`, and `backup`.
 
 The `gideon` account stood out because there were five failed login attempts only a few seconds apart. The last failed attempt was at 08:17:15, followed by a successful login from the same IP at 08:18:01.
 
@@ -148,9 +148,9 @@ I would check what happened after the successful login, including files or folde
 
 ## Remediation
 
-If this were a real environment, my first step would be to report the activity to my supervisor or security team.
+If this were a real environment, I would follow the organization's incident response playbook and escalate the activity through the appropriate security or management channel.
 
-I would then follow the organization's incident response playbook and preserve the relevant logs and evidence before making changes to the system.
+I would preserve the relevant logs and evidence before making changes to the system, according to the organization's procedures.
 
 Depending on what is found, possible actions could include:
 

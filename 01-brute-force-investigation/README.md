@@ -4,7 +4,7 @@
 
 This project is a simulated investigation of suspicious SSH login activity on a Linux server.
 
-I analyzed an authentication log to identify failed login attempts, source IP addresses, targeted accounts, and successful authentication attempts.
+I analyzed an authentication log to identify failed login attempts, source IP addresses, targeted usernames, and successful authentication attempts.
 
 The investigation was performed using Ubuntu through WSL and Linux command-line tools.
 
@@ -15,8 +15,8 @@ The log contained:
 - 20 failed SSH login attempts
 - 18 failed attempts from `185.73.44.21`
 - 2 failed attempts from `203.0.113.45`
-- `185.73.44.21` targeted four accounts: `admin`, `root`, `gideon`, and `backup`
-- `203.0.113.45` targeted the `test` account
+- `185.73.44.21` targeted four usernames: `admin`, `root`, `gideon`, and `backup`
+- `203.0.113.45` targeted the `test` username
 - 15 failed attempts from `185.73.44.21` occurred before a successful login to `gideon`
 - 3 additional failed attempts against `backup` occurred after the successful login
 - The successful login occurred 46 seconds after the last failed attempt against `gideon`
@@ -41,7 +41,7 @@ I used Linux command-line tools to:
 
 1. Count failed SSH authentication attempts.
 2. Identify the source IP addresses.
-3. Identify the accounts being targeted.
+3. Identify the usernames targeted by the suspicious IP address.
 4. Check for successful authentication from the suspicious IP.
 5. Build a timeline of the activity.
 6. Identify additional evidence that would be needed for further investigation.
@@ -76,9 +76,9 @@ The full investigation, including the commands used, results, timeline, findings
 
 ![Source IP analysis](screenshots/02-source-ip-analysis.png)
 
-### 3. Targeted Accounts
+### 3. Targeted Usernames
 
-![Targeted accounts](screenshots/03-targeted-accounts.png)
+![Targeted usernames](screenshots/03-targeted-accounts.png)
 
 ### 4. Successful Authentication
 
