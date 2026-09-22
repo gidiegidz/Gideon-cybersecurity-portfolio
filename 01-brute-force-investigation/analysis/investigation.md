@@ -120,6 +120,30 @@ There were five failed attempts against `gideon` between 08:17:03 and 08:17:15. 
 
 The log shows that the login was accepted, but it does not prove that the account was compromised. I would need to check other logs to see what happened after the login.
 
+## Timeline Validation
+
+To isolate all activity from the suspicious IP address, I created a separate file containing only events from `185.73.44.21`:
+
+    grep "185.73.44.21" logs/auth.log > logs/suspicious-ip-events.txt
+
+I then counted the number of events in that file:
+
+    wc -l logs/suspicious-ip-events.txt
+
+The result was:
+
+    19 logs/suspicious-ip-events.txt
+
+This showed that there were 19 total authentication events associated with `185.73.44.21`: 18 failed attempts and 1 successful authentication.
+
+I also checked the first and last events from that IP:
+
+    grep "185.73.44.21" logs/auth.log | head -1
+
+    grep "185.73.44.21" logs/auth.log | tail -1
+
+The first event occurred at 08:15:22, and the last event occurred at 08:19:20. This showed that the activity from `185.73.44.21` lasted 3 minutes and 58 seconds.
+
 ## Incident Timeline
 
 The suspicious activity from `185.73.44.21` happened between 08:15 and 08:19.
