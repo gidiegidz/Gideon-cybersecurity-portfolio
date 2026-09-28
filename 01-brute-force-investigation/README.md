@@ -1,85 +1,77 @@
-# SSH Brute-Force Attack Investigation
+# SSH Brute-Force Investigation
 
 ## Overview
 
-This project is a simulated investigation of suspicious SSH login activity on a Linux server.
+For this project I investigated simulated SSH authentication activity on a Linux server.
 
-I analyzed an authentication log to identify failed login attempts, source IP addresses, targeted usernames, and successful authentication attempts.
+The goal was to practice using Linux command-line tools to identify failed login attempts, source IP addresses, targeted usernames, successful authentication, and build a timeline of the activity.
 
-The investigation was performed using Ubuntu through WSL and Linux command-line tools.
+## Lab Environment
 
-## Investigation Summary
+Ubuntu Linux
 
-The log contained:
+WSL (Windows Subsystem for Linux)
 
-- 20 failed SSH login attempts
-- 18 failed attempts from `185.73.44.21`
-- 2 failed attempts from `203.0.113.45`
-- `185.73.44.21` targeted four usernames: `admin`, `root`, `gideon`, and `backup`
-- `203.0.113.45` targeted the `test` username
-- 15 failed attempts from `185.73.44.21` occurred before a successful login to `gideon`
-- 3 additional failed attempts against `backup` occurred after the successful login
-- The successful login occurred 46 seconds after the last failed attempt against `gideon`
+Simulated SSH authentication log
 
-The successful login does not prove that the account was compromised. Additional logs and system activity would be needed to determine whether the login was authorized.
+## What I Practiced
 
-## Tools Used
+Linux command-line analysis
 
-- Ubuntu Linux
-- WSL
-- grep
-- awk
-- sort
-- uniq
-- head
-- tail
-- wc
+SSH authentication log analysis
 
-## Investigation Process
+grep
 
-I used Linux command-line tools to:
+awk
 
-1. Count failed SSH authentication attempts.
-2. Identify the source IP addresses.
-3. Identify the usernames targeted by the suspicious IP address.
-4. Check for successful authentication from the suspicious IP.
-5. Build a timeline of the activity.
-6. Identify additional evidence that would be needed for further investigation.
+sort
 
-## Key Finding
+uniq
 
-The main finding was repeated failed authentication activity from `185.73.44.21`. The IP generated 15 failed attempts against `admin`, `root`, and `gideon` before a successful login to the `gideon` account. Three additional failed attempts against `backup` occurred afterward.
+head
 
-This activity would require further investigation in a real environment to determine whether the successful login was authorized.
+tail
 
-## Environment
+wc
 
-- Ubuntu Linux
-- Windows Subsystem for Linux (WSL)
-- Simulated SSH authentication log
+Timeline analysis
 
-No real credentials, production systems, or private network data were used.
+Authentication investigation
+
+## Findings
+
+I found 20 failed SSH login attempts in the log.
+
+18 of the failed attempts came from 185.73.44.21.
+
+2 failed attempts came from 203.0.113.45.
+
+The IP address 185.73.44.21 targeted admin, root, gideon, and backup.
+
+There were 15 failed attempts from 185.73.44.21 before a successful login to gideon.
+
+The last failed attempt against gideon happened at 08:17:15.
+
+The successful login happened at 08:18:01, which was 46 seconds later.
+
+After the successful login, the same IP generated 3 more failed attempts against backup.
+
+The activity from 185.73.44.21 lasted 3 minutes and 58 seconds.
+
+The pattern is consistent with repeated password guessing, but the log alone does not prove that the gideon account was compromised.
+
+## Evidence
+
+Screenshots are included in the screenshots folder showing the failed login count, source IP analysis, targeted usernames, and successful authentication.
 
 ## Detailed Investigation
 
-The full investigation, including the commands used, results, timeline, findings, remediation considerations, and limitations is available here:
+The full investigation notes are available in:
 
-[Investigation Report](analysis/investigation.md)
+analysis/investigation.md
 
-## Screenshots
+## GenAI Use
 
-### 1. Failed Authentication Count
+Generative AI was used to create the simulated authentication log and as a learning aid during the project.
 
-![Failed authentication count](screenshots/01-failed-authentication-count.png)
-
-### 2. Source IP Analysis
-
-![Source IP analysis](screenshots/02-source-ip-analysis.png)
-
-### 3. Targeted Usernames
-
-![Targeted usernames](screenshots/03-targeted-accounts.png)
-
-### 4. Successful Authentication
-
-![Successful authentication](screenshots/04-successful-authentication.png)
+I performed the log analysis, command-line investigation, timeline review, and findings myself.

@@ -1,205 +1,205 @@
-# SSH Brute-Force Attack Investigation
+# SSH Brute-Force Investigation
 
-## Investigation Overview
+## Goal
 
-This project is a simulated investigation of suspicious SSH login activity on a Linux server.
+For this project I investigated simulated SSH authentication activity on a Linux server.
 
-I analyzed the authentication log to find failed login attempts, identify the source IP addresses, see which usernames were targeted, and check if any login was successful.
+The goal was to identify failed login attempts, find the source IP addresses, see which usernames were targeted, check for successful authentication, and build a timeline of the activity.
 
-I used Linux command-line tools such as `grep`, `awk`, `sort`, `uniq`, `head`, `tail`, and `wc`.
+## Lab Setup
 
+I used Ubuntu through WSL (Windows Subsystem for Linux) for the investigation.
 
-## Lab Environment & Data
+The authentication log was synthetically generated using generative AI to simulate SSH login activity.
 
-I used Ubuntu through WSL (Windows Subsystem for Linux) for this project.
+No real credentials, production systems, or private network data were used.
 
-The authentication log was synthetically generated using generative AI to simulate SSH login activity. I then analyzed the log using Linux command-line tools.
+## What I Practiced
 
-No real credentials or production systems were used.
+Linux command-line analysis
 
-### Tools Used
+SSH authentication log analysis
 
-- Ubuntu Linux
-- WSL
-- grep
-- awk
-- sort
-- uniq
-- head
-- tail
-- wc
+grep
 
+awk
 
-## Investigation Objectives
+sort
 
-For this investigation, I wanted to:
+uniq
 
-1. Find the total number of failed SSH login attempts.
-2. Find the source IP addresses of the failed attempts.
-3. See which usernames were targeted by the suspicious IP address.
-4. Check if any login was successful from a suspicious IP.
-5. Build a timeline of what happened.
-6. Identify what other evidence I would need to determine whether the account was compromised.
+head
 
+tail
 
-## Failed Authentication Analysis
+wc
 
-I started by checking how many failed SSH login attempts were in the log.
+Timeline analysis
+
+Authentication investigation
+
+## Failed Login Analysis
+
+I first checked how many failed SSH login attempts were in the log.
 
 I used:
 
-    grep -c "Failed password" logs/auth.log
+grep -c "Failed password" logs/auth.log
 
 The result was:
 
-    20
+20
 
 There were 20 failed login attempts in total.
 
-I then checked where these attempts came from to see if there was a pattern.
-
-
 ## Source IP Analysis
 
-Next, I wanted to see which IP addresses were behind the failed login attempts.
+I checked which IP addresses were the source of the failed login attempts.
 
 I used:
 
-    grep "Failed password" logs/auth.log | awk '{print $(NF-3)}'
-
-This showed the IP address for each failed login attempt.
-
-I then sorted and counted the IP addresses:
-
-    grep "Failed password" logs/auth.log | awk '{print $(NF-3)}' | sort | uniq -c
+grep "Failed password" logs/auth.log | awk '{print $(NF-3)}' | sort | uniq -c
 
 The results were:
 
-    18 185.73.44.21
-     2 203.0.113.45
+18 185.73.44.21
 
-The IP address `185.73.44.21` was the source of 18 of the 20 failed attempts.
+2 203.0.113.45
 
-The IP address `203.0.113.45` was the source of the other 2 failed attempts.
+The IP address 185.73.44.21 was the source of 18 of the 20 failed attempts.
 
+The other 2 failed attempts came from 203.0.113.45.
 
-## Targeted Username Analysis
+## Targeted Usernames
 
-Next, I wanted to see which usernames were being targeted by the suspicious IP address `185.73.44.21`.
+I then checked which usernames were targeted by 185.73.44.21.
 
 I used:
 
-    grep "Failed password" logs/auth.log | grep "185.73.44.21" | awk '{print $(NF-5)}' | sort | uniq -c
+grep "Failed password" logs/auth.log | grep "185.73.44.21" | awk '{print $(NF-5)}' | sort | uniq -c
 
 The results were:
 
-     5 admin
-     3 backup
-     5 gideon
-     5 root
+5 admin
 
-The IP address `185.73.44.21` targeted four different usernames: `admin`, `root`, `gideon`, and `backup`.
+3 backup
 
-The other two failed login attempts in the log came from `203.0.113.45` and targeted the `test` username.
+5 gideon
 
-## Successful Authentication Analysis
+5 root
 
-Next, I checked if the suspicious IP address had any successful logins.
+The IP address targeted admin, root, gideon, and backup.
+
+The 2 failed attempts from 203.0.113.45 targeted the test username.
+
+## Successful Login
+
+I checked whether 185.73.44.21 also had any successful authentication.
 
 I used:
 
-    grep "Accepted password" logs/auth.log | grep "185.73.44.21"
+grep "Accepted password" logs/auth.log | grep "185.73.44.21"
 
-The result was:
+The result showed:
 
-    Sep 18 08:18:01 server01 sshd[1225]: Accepted password for gideon from 185.73.44.21 port 44192 ssh2
+Sep 18 08:18:01 server01 sshd[1225]: Accepted password for gideon from 185.73.44.21 port 44192 ssh2
 
-This caught my attention because the same IP address had 15 failed login attempts before a successful login to `gideon`. The IP generated 18 failed attempts in total, with three additional failed attempts against `backup` occurring after the successful login.
+There were 15 failed attempts from the same IP before the successful login to gideon.
 
-There were five failed attempts against `gideon` between 08:17:03 and 08:17:15. The successful login happened at 08:18:01, which was 46 seconds after the last failed attempt.
+Five of those failed attempts targeted gideon between 08:17:03 and 08:17:15.
 
-The log shows that the login was accepted, but it does not prove that the account was compromised. I would need to check other logs to see what happened after the login.
+The successful login happened at 08:18:01, which was 46 seconds after the last failed attempt against gideon.
+
+After the successful login, the same IP generated 3 more failed attempts against backup.
 
 ## Timeline Validation
 
-To isolate all activity from the suspicious IP address, I created a separate file containing only events from `185.73.44.21`:
+I created a separate file containing only events from 185.73.44.21.
 
-    grep "185.73.44.21" logs/auth.log > logs/suspicious-ip-events.txt
+grep "185.73.44.21" logs/auth.log > logs/suspicious-ip-events.txt
 
-I then counted the number of events in that file:
+I counted the events using:
 
-    wc -l logs/suspicious-ip-events.txt
+wc -l logs/suspicious-ip-events.txt
 
 The result was:
 
-    19 logs/suspicious-ip-events.txt
+19 logs/suspicious-ip-events.txt
 
-This showed that there were 19 total authentication events associated with `185.73.44.21`: 18 failed attempts and 1 successful authentication.
+This showed 19 total authentication events from 185.73.44.21.
 
-I also checked the first and last events from that IP:
+18 were failed login attempts and 1 was a successful login.
 
-    grep "185.73.44.21" logs/auth.log | head -1
+I also checked the first and last events using:
 
-    grep "185.73.44.21" logs/auth.log | tail -1
+grep "185.73.44.21" logs/auth.log | head -1
 
-The first event occurred at 08:15:22, and the last event occurred at 08:19:20. This showed that the activity from `185.73.44.21` lasted 3 minutes and 58 seconds.
+grep "185.73.44.21" logs/auth.log | tail -1
 
-## Incident Timeline
+The first event occurred at 08:15:22.
 
-The suspicious activity from `185.73.44.21` happened between 08:15 and 08:19.
+The last event occurred at 08:19:20.
 
-- 08:15 — 5 failed attempts for `admin`
-- 08:16 — 5 failed attempts for `root`
-- 08:17 — 5 failed attempts for `gideon`
-- 08:18 — Successful login to `gideon`
-- 08:19 — 3 failed attempts for `backup`
+The activity lasted 3 minutes and 58 seconds.
 
-The main thing I noticed was the successful login to `gideon` after several failed attempts from the same IP.
+## Timeline
 
+08:15 - 5 failed attempts for admin
+
+08:16 - 5 failed attempts for root
+
+08:17 - 5 failed attempts for gideon
+
+08:18 - Successful login to gideon
+
+08:19 - 3 failed attempts for backup
 
 ## Findings
 
-There were 20 failed login attempts in the log. Most of them came from `185.73.44.21`, which was the source of 18 attempts.
+There were 20 failed SSH login attempts in the log.
 
-The IP address `185.73.44.21` targeted four usernames: `admin`, `root`, `gideon`, and `backup`.
+Most of the activity came from 185.73.44.21, which generated 18 failed attempts and 1 successful authentication.
 
-The `gideon` account stood out because there were five failed login attempts only a few seconds apart. The last failed attempt was at 08:17:15, followed by a successful login from the same IP at 08:18:01.
+The failed attempts targeted multiple usernames.
 
-This does not prove that the `gideon` account was compromised. It gives us a reason to investigate the account and the activity from that IP further.
+The part that stood out the most was the 5 failed attempts against gideon followed 46 seconds later by a successful login from the same IP.
 
-I would check what happened after the successful login, including files or folders that were accessed or changed, account activity, and network activity.
+The pattern is consistent with repeated password guessing, but the log alone does not prove that the gideon account was compromised.
 
+I would need more evidence to determine whether the successful login was authorized and what happened after the login.
 
-## Remediation
+## Further Investigation
 
-If this were a real environment, I would follow the organization's incident response playbook and escalate the activity through the appropriate security or management channel.
+If this were a real environment, I would check:
 
-I would preserve the relevant logs and evidence before making changes to the system, according to the organization's procedures.
+Activity after the successful login
 
-Depending on what is found, possible actions could include:
+Commands run during the session
 
-- Reset the `gideon` account password if unauthorized access is suspected.
-- Review the account and system activity after the successful login.
-- Block or restrict the suspicious IP address if it is confirmed to be unauthorized.
-- Enable MFA if it is available.
-- Consider using SSH keys instead of password authentication.
-- Review other accounts and systems for similar login activity.
+Files or folders that were accessed or changed
 
-The exact response would depend on the organization's procedures and what is found during the investigation. Since this is a simulated lab, no real systems or accounts were changed.
+Account activity
 
+Running processes
 
-## Limitations
+Network activity
 
-This investigation was based mainly on the simulated `auth.log` file, so there are some things I cannot determine from the available data.
+Other authentication and system logs
 
-The successful login does not prove that the `gideon` account was compromised. The log only shows that password authentication was accepted. It does not tell us how the credentials were obtained or whether the login was authorized.
+I would also follow the organization's incident response process and preserve the relevant evidence before making changes.
 
-I would need to check additional information such as:
+Depending on the findings, possible actions could include resetting the account password, blocking the source IP if it was confirmed to be unauthorized, enabling MFA, and reviewing SSH authentication settings.
 
-- Activity after the successful login.
-- Commands that were run during the session.
-- Files or folders that were accessed or changed.
-- Network activity from the account.
-- The geographic location of the source IP and whether it matches the expected location of the user.
-- Other authentication or system logs that could provide more information.
+## Conclusion
 
+This project helped me practice using Linux command-line tools to investigate authentication logs.
+
+I was able to identify the main source IP, targeted usernames, failed and successful authentication events, and build a timeline of the activity.
+
+I also learned that a successful login after multiple failures is something that should be investigated further, but it does not automatically prove that an account was compromised.
+
+## GenAI Use
+
+Generative AI was used to create the simulated authentication log and as a learning aid during the project.
+
+I performed the log analysis, commands, timeline review, and investigation myself.
