@@ -19,3 +19,11 @@ Built an Active Directory lab and investigated failed and successful domain auth
 Skills practiced: Active Directory, Windows Server, Group Policy, Event Viewer, Windows Security logs, Kerberos, event correlation
 
 Project folder: 02-active-directory-security-investigation
+
+### 03 - Phishing Email Investigation
+
+Investigated a simulated phishing email by analyzing email headers, authentication results, suspicious URLs, domains, IP addresses, and reputation data.
+
+Skills practiced: email header analysis, SPF, DKIM, DMARC, IOC extraction, Python, DNS, WHOIS, RDAP, VirusTotal, urlscan.io, AbuseIPDB, incident response reasoning
+
+Project folder: 03-phishing-email-investigation
