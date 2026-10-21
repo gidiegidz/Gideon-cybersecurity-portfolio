@@ -77,9 +77,3 @@ Screenshots and other evidence are stored in the screenshots folder.
 The full investigation notes are available in:
 
 analysis/investigation.md
-
-## GenAI Use
-
-Generative AI was used as a learning aid for step-by-step guidance, troubleshooting, and understanding email security concepts that were new to me.
-
-I performed the email analysis, IOC extraction, DNS lookups, reputation checks, and documentation myself.

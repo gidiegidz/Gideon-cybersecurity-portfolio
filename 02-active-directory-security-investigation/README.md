@@ -95,9 +95,3 @@ Screenshots are included in the screenshots folder showing the Active Directory 
 The full investigation notes are available in:
 
 analysis/investigation.md
-
-## GenAI Use
-
-I used generative AI as a learning aid for step-by-step guidance, troubleshooting, and understanding concepts that were new to me.
-
-I performed the lab setup, configuration, testing, and event log analysis myself.

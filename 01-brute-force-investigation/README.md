@@ -69,9 +69,3 @@ Screenshots are included in the screenshots folder showing the failed login coun
 The full investigation notes are available in:
 
 analysis/investigation.md
-
-## GenAI Use
-
-Generative AI was used to create the simulated authentication log and as a learning aid during the project.
-
-I performed the log analysis, command-line investigation, timeline review, and findings myself.

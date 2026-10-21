@@ -197,9 +197,3 @@ This project helped me practice using Linux command-line tools to investigate au
 I was able to identify the main source IP, targeted usernames, failed and successful authentication events, and build a timeline of the activity.
 
 I also learned that a successful login after multiple failures is something that should be investigated further, but it does not automatically prove that an account was compromised.
-
-## GenAI Use
-
-Generative AI was used to create the simulated authentication log and as a learning aid during the project.
-
-I performed the log analysis, commands, timeline review, and investigation myself.

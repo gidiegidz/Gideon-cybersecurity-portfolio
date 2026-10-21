@@ -178,9 +178,3 @@ In this project I learned how Active Directory authentication events can be inve
 I was able to generate failed and successful login attempts, identify the related Windows Security events, and match the activity between WS01 and DC01 using the account, timestamps, IP address, and event details.
 
 I also learned the basic role of Kerberos in domain authentication and how Event IDs 4768 and 4771 can help investigate authentication activity.
-
-## GenAI Use
-
-I used generative AI as a learning aid for step-by-step guidance, troubleshooting, and understanding concepts that were new to me.
-
-I performed the lab setup, configuration, testing, and event log analysis myself.

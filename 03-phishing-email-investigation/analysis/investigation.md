@@ -135,9 +135,3 @@ Possible next steps would include identifying whether other users received the s
 The email contained multiple indicators consistent with phishing, including sender mismatches, failed email authentication, a suspicious URL, and urgency designed to pressure the recipient.
 
 The investigation showed the importance of reviewing both the visible email content and the underlying technical headers before reaching a conclusion.
-
-## GenAI Use
-
-I used generative AI as a learning aid for step-by-step guidance, troubleshooting, and understanding email security concepts that were new to me.
-
-I performed the email analysis, IOC extraction, DNS lookups, reputation checks, and documentation myself.
